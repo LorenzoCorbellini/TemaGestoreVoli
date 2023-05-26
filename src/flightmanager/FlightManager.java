@@ -94,11 +94,7 @@ public class FlightManager {
 		flights.add(f);
 	}
 
-	public void addBooking(SingleBooking b) {
-		bookings.add(b);
-	}
-
-	public void addBooking(GroupBooking b) {
+	public void addBooking(Booking b) {
 		bookings.add(b);
 	}
 
@@ -110,6 +106,12 @@ public class FlightManager {
 		}
 
 		f.addBooking(b);
+	}
+
+	public void removeBookingFromFlight(Booking b, int flightId) {
+		Flight f = getFlight(flightId);
+
+		f.removeBooking(b);
 	}
 
 	public void readFlightsFromFile(String path) throws FileNotFoundException {
@@ -191,8 +193,9 @@ public class FlightManager {
 
 	public void deepPrintFlights() {
 		for (Flight flight : flights) {
-			System.out.println(
-					flight.toString() + ", date&time: " + flight.getDate().toLocaleString() + ", isFull: " + flight.isFull() + ", seatsTaken: " +flight.seatsTaken());
+			System.out.println(flight.toString() + ", date&time: " + flight.getDate().toLocaleString() + ", isFull: "
+					+ flight.isFull() + ", seatsTaken: " + flight.seatsTaken() + ", single bookings: "
+					+ flight.numberOfSingleBookings() + ", group bookings: " + flight.numberOfGroupBookings());
 		}
 	}
 }

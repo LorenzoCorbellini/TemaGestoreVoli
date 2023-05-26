@@ -74,12 +74,32 @@ public class Flight {
 		bookings.add(b);
 	}
 	
-	public void addBooking(SingleBooking b) {
-		bookings.add(b);
+	public void removeBooking(Booking b) {
+		bookings.remove(b);
 	}
 	
-	public void addBooking(GroupBooking b) {
-		bookings.add(b);
+	public int numberOfSingleBookings() {
+		int singleBookings = 0;
+		
+		for (Booking booking : bookings) {
+			if(booking instanceof SingleBooking) {
+				singleBookings++;
+			}
+		}
+		
+		return singleBookings;
+	}
+	
+	public int numberOfGroupBookings() {
+		int groupBookings = 0;
+		
+		for (Booking booking : bookings) {
+			if(booking instanceof GroupBooking) {
+				groupBookings++;
+			}
+		}
+		
+		return groupBookings;
 	}
 
 	@Override

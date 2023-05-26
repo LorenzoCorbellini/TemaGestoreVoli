@@ -50,16 +50,21 @@ public class Program {
 		SingleBooking b4 = new SingleBooking("jkl", 35, SeatType.NEUTRAL);
 		SingleBooking b5 = new SingleBooking("mno", 70, SeatType.CORRIDOR);
 		SingleBooking b6 = new SingleBooking("pqr", 85, SeatType.WINDOW);
+		GroupBooking b7 = new GroupBooking(10);
+
 		try {
 			fm.addBookingToFlight(b1, 0);			
-			fm.addBookingToFlight(b1, 0);			
+			fm.addBookingToFlight(b2, 0);			
 			fm.addBookingToFlight(b3, 0);			
 			fm.addBookingToFlight(b4, 0);			
 			fm.addBookingToFlight(b5, 0);			
-			fm.addBookingToFlight(b6, 0);			
+			fm.addBookingToFlight(b6, 0);		
+			fm.addBookingToFlight(b7, 0);
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
+		
+		fm.removeBookingFromFlight(b1, 0);
 		
 		fm.printBookings();
 		fm.deepPrintFlights();
