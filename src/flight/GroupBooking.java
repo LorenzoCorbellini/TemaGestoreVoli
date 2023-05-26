@@ -11,10 +11,10 @@ public class GroupBooking extends Booking {
 	private final float pricePerPerson;
 	private float priceTotal;
 
-	public GroupBooking(BookingIdManager idManager, int pricePerPerson) {
-		super(idManager);
+	public GroupBooking(int pricePerPerson) {
+		super();
 		this.pricePerPerson = pricePerPerson;
-		this.priceTotal = computeCost();
+		this.priceTotal = 0;
 	}
 
 	public void addPerson(String ssn) {
@@ -53,5 +53,11 @@ public class GroupBooking extends Booking {
 	
 	public float getPriceTotal() {
 		return priceTotal;
+	}
+	
+	@Override
+	public String toString() {
+		return "ab";
+//		return "Group booking: [" +this.getId()+"], price: "+this.pricePerPerson;
 	}
 }

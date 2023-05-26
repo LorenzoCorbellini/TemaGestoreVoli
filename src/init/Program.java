@@ -9,13 +9,22 @@ public class Program {
 	public static void main(String[] args) {
 		FlightManager fm = new FlightManager();
 		
+//		try {
+//			fm.readFlightsFromFile("./resources/flights.csv");
+//		} catch (FileNotFoundException e) {
+//			System.out.println("Could not find flights file!");
+//		}
+//		
+//		fm.printFlights();
+
 		try {
-			fm.readFlightsFromFile("./resources/flights.csv");
+			fm.readBookingsFromFile("./resources/bookings.csv");
 		} catch (FileNotFoundException e) {
-			System.out.println("Could not find file!");
+			System.out.println("Could not find bookings file!");
 		}
 		
-		fm.printFlights();
+		fm.printSingleBookings();
+//		fm.printGroupBookings();
 	}
 
 }

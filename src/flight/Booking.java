@@ -5,8 +5,8 @@ import flightmanager.BookingIdManager;
 public abstract class Booking {
 	private final String id;
 	
-	public Booking(BookingIdManager idManager) {
-		this.id = idManager.getNewBookingId();
+	public Booking() {
+		this.id = BookingIdManager.getInstance().getNewBookingId();
 	}
 
 	/**

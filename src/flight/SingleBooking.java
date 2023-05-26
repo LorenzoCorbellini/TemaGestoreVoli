@@ -8,8 +8,8 @@ public class SingleBooking extends Booking {
 	private final float price;
 	private final SeatType seat;
 	
-	public SingleBooking(BookingIdManager idManager, String ssn, int price, SeatType seat) {
-		super(idManager);
+	public SingleBooking(String ssn, int price, SeatType seat) {
+		super();
 		this.ssn = ssn;
 		this.price = price;
 		this.seat = seat;
@@ -34,5 +34,10 @@ public class SingleBooking extends Booking {
 	 */
 	public SeatType getSeat() {
 		return seat;
+	}
+	
+	@Override
+	public String toString() {
+		return "Group booking: [" +this.getId()+"], price: "+this.price+ ", seat: "+this.seat;
 	}
 }

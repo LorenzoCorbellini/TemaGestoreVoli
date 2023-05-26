@@ -8,7 +8,7 @@ public class BookingIdManager {
 	private static BookingIdManager instance = null;
 	private final int idLength = 6;
 	private Set<String> unavailableIds = new HashSet<>();
-	private Character[] idChars = new Character[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 65, 66, 67, 68, 69, 70, 71, 72, 73,
+	private Character[] idChars = new Character[] { 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 65, 66, 67, 68, 69, 70, 71, 72, 73,
 			74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90 };
 
 	private BookingIdManager() { }
@@ -21,7 +21,7 @@ public class BookingIdManager {
 		return instance;
 	}
 
-	public void makeIdUnavailable(String id) {
+	private void makeIdUnavailable(String id) {
 		if (isIdAvailable(id)) {
 			unavailableIds.add(id);
 		} else {
@@ -40,6 +40,8 @@ public class BookingIdManager {
 			id = generateRandomId();
 		} while (!isIdAvailable(id));
 		
+		makeIdUnavailable(id);
+		
 		return id;
 	}
 	
@@ -49,7 +51,7 @@ public class BookingIdManager {
 		int randomIndex = rd.nextInt(idChars.length);
 		
 		for (int i = 0; i < idLength; i++) {
-			newId.concat(String.valueOf(idChars[randomIndex]));
+			newId = newId + String.valueOf(idChars[randomIndex]);
 			randomIndex = rd.nextInt(idChars.length);
 		}
 		
