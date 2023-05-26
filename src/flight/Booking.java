@@ -16,6 +16,11 @@ public abstract class Booking {
 		return id;
 	}
 	
+	/**
+	 * Returns the number of seats taken by this booking
+	 * @return
+	 */
+	public abstract int getNumberOfSeats();
 
 	@Override
 	public int hashCode() {

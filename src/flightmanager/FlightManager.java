@@ -5,9 +5,11 @@ import java.io.FileNotFoundException;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 import java.util.Set;
 
+import exceptions.FlightCapacityExceededException;
 import flight.Booking;
 import flight.Flight;
 import flight.GroupBooking;
@@ -16,16 +18,34 @@ import flight.SingleBooking;
 
 public class FlightManager {
 	private Set<Flight> flights = new HashSet<>();
-	private Set<SingleBooking> singleBookings = new HashSet<>();
-	private Set<GroupBooking> groupBookings = new HashSet<>();
+	private Set<Booking> bookings = new HashSet<>();
 
 	public FlightManager() {
 
 	}
 
 	/**
-	 * Creates a new flight from the format "departure,destination,gg/mm/yyyy,hh:mm,maxSeats"
-	 * Example: "BGY,FCO,01/10/2000,09:30,120"
+	 * Creates a new booking and adds it to the bookings<br>
+	 * Single booking: 'S,ssn,price,seatPreference' | Example:
+	 * 'S,"abcdef",40,CORRIDOR' <br>
+	 * Group booking: 'G,pricePerPerson' | Example: 'G,20'
+	 * 
+	 * @param bookingInfo
+	 */
+	public void addBooking(String bookingInfo) {
+		if (bookingInfo.charAt(0) == "S".toCharArray()[0]) {
+			addBooking(parseSingleBooking(bookingInfo.split(",")));
+		} else if (bookingInfo.charAt(0) == "G".toCharArray()[0]) {
+			addBooking(parseGroupBooking(bookingInfo.split(",")));
+		} else {
+			throw new IllegalArgumentException("String booking not formatted the correct way!");
+		}
+	}
+
+	/**
+	 * Creates a new flight from the format
+	 * "departure,destination,gg/mm/yyyy,hh:mm,maxSeats" Example:
+	 * "BGY,FCO,01/10/2000,09:30,120"
 	 * 
 	 * @param flightInfo
 	 */
@@ -40,12 +60,56 @@ public class FlightManager {
 		addFlight(new Flight(date, dep, dest, maxSeats));
 	}
 
+	/**
+	 * Returns the flight with the specified id
+	 * 
+	 * @param id
+	 * @return
+	 */
+	private Flight getFlight(int id) {
+		for (Flight flight : flights) {
+			if (flight.getId() == id) {
+				return flight;
+			}
+		}
+		throw new NoSuchElementException("Flight with id [" + id + "] does not exist!");
+	}
+
+	/**
+	 * Returns the booking with the specified id
+	 * 
+	 * @param id
+	 * @return
+	 */
+	private Booking getBooking(String id) {
+		for (Booking booking : bookings) {
+			if (booking.getId().equals(id)) {
+				return booking;
+			}
+		}
+		throw new NoSuchElementException("Booking with id [" + id + "] does not exist!");
+	}
+
 	public void addFlight(Flight f) {
 		flights.add(f);
 	}
 
-	public void addBooking(Booking b) {
+	public void addBooking(SingleBooking b) {
+		bookings.add(b);
+	}
 
+	public void addBooking(GroupBooking b) {
+		bookings.add(b);
+	}
+
+	public void addBookingToFlight(Booking b, int flightId) throws FlightCapacityExceededException {
+		Flight f = getFlight(flightId);
+
+		if (f.isFull()) {
+			throw new FlightCapacityExceededException("Flight [" + flightId + "] has run out of seats!");
+		}
+
+		f.addBooking(b);
 	}
 
 	public void readFlightsFromFile(String path) throws FileNotFoundException {
@@ -86,12 +150,12 @@ public class FlightManager {
 			}
 
 			if (fields[0].charAt(0) == "S".toCharArray()[0]) { // Read single booking
-				singleBookings.add(parseSingleBooking(fields));
+				bookings.add(parseSingleBooking(fields));
 				continue;
 			}
 
 			if (fields[0].charAt(0) == "G".toCharArray()[0]) { // Read group booking
-				groupBookings.add(parseGroupBooking(fields));
+				bookings.add(parseGroupBooking(fields));
 				continue;
 			}
 
@@ -119,16 +183,16 @@ public class FlightManager {
 		}
 	}
 
-	public void printSingleBookings() {
-		for (SingleBooking booking : singleBookings) {
+	public void printBookings() {
+		for (Booking booking : bookings) {
 			System.out.println(booking.toString());
 		}
 	}
 
-	public void printGroupBookings() {
-		for (GroupBooking booking : groupBookings) {
-			System.out.println(booking.toString());
+	public void deepPrintFlights() {
+		for (Flight flight : flights) {
+			System.out.println(
+					flight.toString() + ", date&time: " + flight.getDate().toLocaleString() + ", isFull: " + flight.isFull() + ", seatsTaken: " +flight.seatsTaken());
 		}
 	}
-
 }

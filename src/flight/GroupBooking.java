@@ -51,6 +51,14 @@ public class GroupBooking extends Booking {
 		return this.priceTotal;
 	}
 	
+	/**
+	 * Returns the number of seats taken by this booking
+	 * @return
+	 */
+	public int getNumberOfSeats() {
+		return ssns.size();
+	}
+	
 	public float getPriceTotal() {
 		return priceTotal;
 	}

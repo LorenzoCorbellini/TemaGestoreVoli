@@ -1,8 +1,8 @@
 package flight;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import flightmanager.FlightIdManager;
 
@@ -13,14 +13,14 @@ public class Flight {
 	private final String departure;
 	private final String destination;
 	private final int maxSeats;
-	private List<Booking> bookings;
+	private Set<Booking> bookings;
 
 	public Flight(int id, Date date, String departure, String destination, int maxSeats) {
 		this.date = date;
 		this.departure = departure;
 		this.destination = destination;
 		this.maxSeats = maxSeats;
-		this.bookings = new ArrayList<>();
+		this.bookings = new HashSet<>();
 
 		if (!isAirportCorrectFormat(departure)) {
 			throw new IllegalArgumentException("Wrong depature format! " + departure);
@@ -51,6 +51,36 @@ public class Flight {
 	private boolean isAirportCorrectFormat(String a) {
 		return a.length() == 3 && a.equals(a.toUpperCase()); // Regex to check if string is uppercase only
 	}
+	
+	/**
+	 * Returns whether all seats in this flight are taken
+	 * @return
+	 */
+	public boolean isFull() {
+		return seatsTaken() >= maxSeats;
+	}
+	
+	public int seatsTaken() {
+		int unavailabelSeats = 0;
+		
+		for (Booking booking : bookings) {
+			unavailabelSeats += booking.getNumberOfSeats();
+		}
+		
+		return unavailabelSeats;
+	}
+	
+	public void addBooking(Booking b) {
+		bookings.add(b);
+	}
+	
+	public void addBooking(SingleBooking b) {
+		bookings.add(b);
+	}
+	
+	public void addBooking(GroupBooking b) {
+		bookings.add(b);
+	}
 
 	@Override
 	public int hashCode() {
@@ -59,7 +89,7 @@ public class Flight {
 
 	@Override
 	public String toString() {
-		return "Flight: [" + id + "], " + departure + " -> " + destination + ", max seats: " + maxSeats+ ", date & time: " +date.toLocaleString();
+		return "Flight: [" + id + "], " + departure + " -> " + destination + ", max seats: " + maxSeats;
 	}
 
 	/**

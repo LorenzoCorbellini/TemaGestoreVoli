@@ -3,37 +3,65 @@ package init;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 
+import javax.swing.plaf.synth.SynthOptionPaneUI;
+
+import flight.GroupBooking;
+import flight.SeatType;
+import flight.SingleBooking;
 import flightmanager.FlightManager;
 
 public class Program {
 
 	public static void main(String[] args) {
 		FlightManager fm = new FlightManager();
-		
-		try {
-			fm.readFlightsFromFile("./resources/flights.csv");
-		} catch (FileNotFoundException e) {
-			System.out.println("Could not find flights file!");
-		}
-		
-		Scanner sc = new Scanner(System.in);
-		
-		System.out.println("Enter new flight: 'BGY,FCO,01/10/2000,09:30,120'");
-		String newFlight = sc.nextLine();
-		fm.addFlight(newFlight);
-		
-		fm.printFlights();
-		
-		sc.close();
-		
+
+		// TEST: read flights from file		
+//		try {
+//			fm.readFlightsFromFile("./resources/flights.csv");
+//		} catch (FileNotFoundException e) {
+//			System.out.println("Could not find flights file!");
+//		}
+
+		// TEST: reading bookings from file
 //		try {
 //			fm.readBookingsFromFile("./resources/bookings.csv");
 //		} catch (FileNotFoundException e) {
 //			System.out.println("Could not find bookings file!");
 //		}
-//		
-//		fm.printSingleBookings();
-//		fm.printGroupBookings();
-	}
 
+
+		Scanner sc = new Scanner(System.in);
+
+		// TEST: read booking from user input
+//		System.out.println("Enter new booking: 'S,\"abcdef\",40,CORRIDOR'");
+//		String newBooking = sc.nextLine();
+//		fm.addBooking(newBooking);
+
+		// TEST: read flight from user input
+		System.out.println("Enter new flight: 'BGY,FCO,01/10/2000,09:30,120'");
+		String newFlight = sc.nextLine();
+		fm.addFlight(newFlight);
+		
+		sc.close();
+		
+		SingleBooking b1 = new SingleBooking("abc", 15, SeatType.CORRIDOR);
+		SingleBooking b2 = new SingleBooking("def", 20, SeatType.NEUTRAL);
+		SingleBooking b3 = new SingleBooking("ghi", 30, SeatType.WINDOW);
+		SingleBooking b4 = new SingleBooking("jkl", 35, SeatType.NEUTRAL);
+		SingleBooking b5 = new SingleBooking("mno", 70, SeatType.CORRIDOR);
+		SingleBooking b6 = new SingleBooking("pqr", 85, SeatType.WINDOW);
+		try {
+			fm.addBookingToFlight(b1, 0);			
+			fm.addBookingToFlight(b1, 0);			
+			fm.addBookingToFlight(b3, 0);			
+			fm.addBookingToFlight(b4, 0);			
+			fm.addBookingToFlight(b5, 0);			
+			fm.addBookingToFlight(b6, 0);			
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+		
+		fm.printBookings();
+		fm.deepPrintFlights();
+	}
 }

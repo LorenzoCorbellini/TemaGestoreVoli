@@ -40,4 +40,9 @@ public class SingleBooking extends Booking {
 	public String toString() {
 		return "Single booking: [" +this.getId()+"], price: "+this.price+ ", seat: "+this.seat;
 	}
+
+	@Override
+	public int getNumberOfSeats() {
+		return 1;
+	}
 }
