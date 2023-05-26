@@ -47,7 +47,7 @@ public class Program {
 		// TEST: create flights from String, add flights to flight manager, add bookings
 		// to flight, move booking from flight to another flight
 		fm.addFlight("BGY,FCO,01/10/2000,09:30,120");
-		fm.addFlight("FCO,BGY,01/20/2000,12:30,120");
+		fm.addFlight("FCO,BGY,15/10/2000,12:30,120");
 
 		SingleBooking b1 = new SingleBooking("abc", 15, SeatType.CORRIDOR);
 		SingleBooking b2 = new SingleBooking("def", 20, SeatType.NEUTRAL);
@@ -73,7 +73,20 @@ public class Program {
 
 		fm.removeBookingFromFlight(b1, 0);
 
-		fm.printBookings();
 		fm.deepPrintFlights();
+		
+		
+		// TEST: adding too many bookings to a flight causes an exception
+		fm.addFlight("HNS,BGY,15/02/2000,04:15,90"); // Flight with id 2
+		
+		try {			
+			for (int i = 0; i < 100; i++) {
+				fm.addBookingToFlight(new SingleBooking("12a", 15, SeatType.CORRIDOR), 2);
+			}
+		} catch (Exception e) {
+			System.err.println(e.getMessage() + " (this is supposed to appear!)");
+		}
+		
+//		fm.printBookings();
 	}
 }

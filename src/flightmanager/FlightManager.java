@@ -101,6 +101,10 @@ public class FlightManager {
 	public void addBookingToFlight(Booking b, int flightId) throws FlightCapacityExceededException {
 		Flight f = getFlight(flightId);
 
+		if(!bookings.contains(b)) {
+			addBooking(b);
+		}
+		
 		if (f.isFull()) {
 			throw new FlightCapacityExceededException("Flight [" + flightId + "] has run out of seats!");
 		}
