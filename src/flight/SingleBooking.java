@@ -38,6 +38,6 @@ public class SingleBooking extends Booking {
 	
 	@Override
 	public String toString() {
-		return "Group booking: [" +this.getId()+"], price: "+this.price+ ", seat: "+this.seat;
+		return "Single booking: [" +this.getId()+"], price: "+this.price+ ", seat: "+this.seat;
 	}
 }

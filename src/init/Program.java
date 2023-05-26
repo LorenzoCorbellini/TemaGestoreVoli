@@ -24,7 +24,7 @@ public class Program {
 		}
 		
 		fm.printSingleBookings();
-//		fm.printGroupBookings();
+		fm.printGroupBookings();
 	}
 
 }

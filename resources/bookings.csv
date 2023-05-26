@@ -1,0 +1,8 @@
+#FORMAT instructions
+#Single booking: S,ssn,price,seatType -> example: S,"abc",40,WINDOW
+#Group booking: G,pricePerPerson
+S,"abcdef",40,CORRIDOR
+S,"123jkl",25,NEUTRAL
+G,20
+G,15
+S,"qwerty",50,WINDOW
