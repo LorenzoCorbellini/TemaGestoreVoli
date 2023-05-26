@@ -59,7 +59,7 @@ public class Flight {
 
 	@Override
 	public String toString() {
-		return "id: [" + id + "] " + departure + " --> " + destination + ", max seats: " + maxSeats;
+		return "Flight: [" + id + "], " + departure + " -> " + destination + ", max seats: " + maxSeats+ ", date & time: " +date.toLocaleString();
 	}
 
 	/**

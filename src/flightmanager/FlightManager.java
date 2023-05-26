@@ -23,8 +23,25 @@ public class FlightManager {
 
 	}
 
-	public void addFlight(Flight f) {
+	/**
+	 * Creates a new flight from the format "departure,destination,gg/mm/yyyy,hh:mm,maxSeats"
+	 * Example: "BGY,FCO,01/10/2000,09:30,120"
+	 * 
+	 * @param flightInfo
+	 */
+	public void addFlight(String flightInfo) {
+		String[] fields = flightInfo.split(",");
 
+		String dep = fields[0];
+		String dest = fields[1];
+		Date date = new Date(fields[3] + " " + fields[2]);
+		int maxSeats = Integer.parseInt(fields[4]);
+
+		addFlight(new Flight(date, dep, dest, maxSeats));
+	}
+
+	public void addFlight(Flight f) {
+		flights.add(f);
 	}
 
 	public void addBooking(Booking b) {
@@ -86,13 +103,13 @@ public class FlightManager {
 		String ssn = fields[1];
 		int price = Integer.parseInt(fields[2]);
 		SeatType seat = SeatType.valueOf(fields[3]);
-		
+
 		return new SingleBooking(ssn, price, seat);
 	}
 
 	private GroupBooking parseGroupBooking(String[] fields) {
 		int price = Integer.parseInt(fields[1]);
-		
+
 		return new GroupBooking(price);
 	}
 
@@ -101,16 +118,17 @@ public class FlightManager {
 			System.out.println(flight.toString());
 		}
 	}
-	
+
 	public void printSingleBookings() {
 		for (SingleBooking booking : singleBookings) {
 			System.out.println(booking.toString());
 		}
 	}
-	
+
 	public void printGroupBookings() {
 		for (GroupBooking booking : groupBookings) {
 			System.out.println(booking.toString());
 		}
 	}
+
 }
