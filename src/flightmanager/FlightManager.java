@@ -114,6 +114,33 @@ public class FlightManager {
 		f.removeBooking(b);
 	}
 
+	/**
+	 * Moves the specified booking from a flight to another. Throws exception if the destinatin flight is full.
+	 * @param b Booking to move
+	 * @param fromFlightId Flight to move the booking from
+	 * @param toFlightId Flight to move the booking to
+	 * @throws FlightCapacityExceededException if the destination flight is full
+	 */
+	public void moveBooking(Booking b, int fromFlightId, int toFlightId) throws FlightCapacityExceededException {
+		Flight from = getFlight(toFlightId);
+		Flight to = getFlight(toFlightId);
+
+		if (!bookings.contains(b)) {
+			addBooking(b);
+		}
+		
+		if(to.isFull()) {
+			throw new FlightCapacityExceededException("Flight [" +to.getId()+ "] is full!");
+		}
+		
+		from.removeBooking(b);
+		to.addBooking(b);
+	}
+
+	public void moveBooking(String bookingId, int fromFlightId, int toFlightId) throws FlightCapacityExceededException {
+		moveBooking(getBooking(bookingId), fromFlightId, toFlightId);
+	}
+
 	public void readFlightsFromFile(String path) throws FileNotFoundException {
 		Scanner sc = new Scanner(new File(path));
 

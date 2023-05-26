@@ -5,6 +5,7 @@ import java.util.Scanner;
 
 import javax.swing.plaf.synth.SynthOptionPaneUI;
 
+import flight.Flight;
 import flight.GroupBooking;
 import flight.SeatType;
 import flight.SingleBooking;
@@ -15,7 +16,7 @@ public class Program {
 	public static void main(String[] args) {
 		FlightManager fm = new FlightManager();
 
-		// TEST: read flights from file		
+		// TEST: read flights from file
 //		try {
 //			fm.readFlightsFromFile("./resources/flights.csv");
 //		} catch (FileNotFoundException e) {
@@ -29,7 +30,6 @@ public class Program {
 //			System.out.println("Could not find bookings file!");
 //		}
 
-
 		Scanner sc = new Scanner(System.in);
 
 		// TEST: read booking from user input
@@ -38,12 +38,17 @@ public class Program {
 //		fm.addBooking(newBooking);
 
 		// TEST: read flight from user input
-		System.out.println("Enter new flight: 'BGY,FCO,01/10/2000,09:30,120'");
-		String newFlight = sc.nextLine();
-		fm.addFlight(newFlight);
-		
-		sc.close();
-		
+//		System.out.println("Enter new flight: 'BGY,FCO,01/10/2000,09:30,120'");
+//		String newFlight = sc.nextLine();
+//		fm.addFlight(newFlight);
+//		
+//		sc.close();
+
+		// TEST: create flights from String, add flights to flight manager, add bookings
+		// to flight, move booking from flight to another flight
+		fm.addFlight("BGY,FCO,01/10/2000,09:30,120");
+		fm.addFlight("FCO,BGY,01/20/2000,12:30,120");
+
 		SingleBooking b1 = new SingleBooking("abc", 15, SeatType.CORRIDOR);
 		SingleBooking b2 = new SingleBooking("def", 20, SeatType.NEUTRAL);
 		SingleBooking b3 = new SingleBooking("ghi", 30, SeatType.WINDOW);
@@ -53,19 +58,21 @@ public class Program {
 		GroupBooking b7 = new GroupBooking(10);
 
 		try {
-			fm.addBookingToFlight(b1, 0);			
-			fm.addBookingToFlight(b2, 0);			
-			fm.addBookingToFlight(b3, 0);			
-			fm.addBookingToFlight(b4, 0);			
-			fm.addBookingToFlight(b5, 0);			
-			fm.addBookingToFlight(b6, 0);		
+			fm.addBookingToFlight(b1, 0);
+			fm.addBookingToFlight(b2, 0);
+			fm.addBookingToFlight(b3, 0);
+			fm.addBookingToFlight(b4, 0);
+			fm.addBookingToFlight(b5, 0);
+			fm.addBookingToFlight(b6, 0);
 			fm.addBookingToFlight(b7, 0);
+
+			fm.moveBooking(b2, 0, 1);
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
-		
+
 		fm.removeBookingFromFlight(b1, 0);
-		
+
 		fm.printBookings();
 		fm.deepPrintFlights();
 	}
