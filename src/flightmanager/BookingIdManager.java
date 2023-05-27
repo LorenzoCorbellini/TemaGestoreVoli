@@ -21,7 +21,7 @@ public class BookingIdManager {
 		return instance;
 	}
 
-	private void makeIdUnavailable(String id) {
+	public void makeIdUnavailable(String id) {
 		if (isIdAvailable(id)) {
 			unavailableIds.add(id);
 		} else {

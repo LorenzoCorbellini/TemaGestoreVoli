@@ -10,9 +10,14 @@ public class GroupBooking extends Booking {
 	private Set<String> ssns = new HashSet<>();
 	private final float pricePerPerson;
 	private float priceTotal;
+	private float discount;
 
 	public GroupBooking(int pricePerPerson) {
-		super();
+		this(null, pricePerPerson);
+	}
+	
+	public GroupBooking(String id, int pricePerPerson) {
+		super(id);
 		this.pricePerPerson = pricePerPerson;
 		this.priceTotal = 0;
 	}
@@ -37,17 +42,12 @@ public class GroupBooking extends Booking {
 		return ssns.contains(ssn);
 	}
 	
-	private float computeCost() {
-		float discount = 0.10f;
-
-		if (ssns.size() > 10) {
-			discount = 0.20f;
-		}
-		return ssns.size() * pricePerPerson * discount;
+	private float computePrice() {		
+		return ssns.size() * pricePerPerson * getDiscount();
 	}
 
-	public float updateTotalPrice() {
-		this.priceTotal = computeCost();
+	public float getPrice() {
+		this.priceTotal = computePrice();
 		return this.priceTotal;
 	}
 	
@@ -59,12 +59,26 @@ public class GroupBooking extends Booking {
 		return ssns.size();
 	}
 	
-	public float getPriceTotal() {
-		return priceTotal;
-	}
-	
 	@Override
 	public String toString() {
 		return "Group booking: [" +this.getId()+"], price: "+this.pricePerPerson;
+	}
+	
+	public String[] getSsns() {
+		return ssns.toArray(new String[0]);
+	}
+	
+	public float getPricePerPerson() {
+		return this.pricePerPerson;
+	}
+	
+	public float getDiscount() {
+		this.discount = 0.10f;
+
+		if (ssns.size() > 10) {
+			this.discount = 0.20f;
+		}
+		
+		return this.discount;
 	}
 }

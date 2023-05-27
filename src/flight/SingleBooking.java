@@ -1,7 +1,5 @@
 package flight;
 
-import flightmanager.BookingIdManager;
-
 public class SingleBooking extends Booking {
 
 	private final String ssn;
@@ -9,7 +7,11 @@ public class SingleBooking extends Booking {
 	private final SeatType seat;
 	
 	public SingleBooking(String ssn, int price, SeatType seat) {
-		super();
+		this(null, ssn, price, seat);
+	}
+	
+	public SingleBooking(String id, String ssn, int price, SeatType seat) {
+		super(id);
 		this.ssn = ssn;
 		this.price = price;
 		this.seat = seat;

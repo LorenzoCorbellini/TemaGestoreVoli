@@ -46,6 +46,7 @@ public class Program {
 
 		// TEST: create flights from String, add flights to flight manager, add bookings
 		// to flight, move booking from flight to another flight
+		
 		fm.addFlight("BGY,FCO,01/10/2000,09:30,120");
 		fm.addFlight("FCO,BGY,15/10/2000,12:30,120");
 
@@ -55,7 +56,7 @@ public class Program {
 		SingleBooking b4 = new SingleBooking("jkl", 35, SeatType.NEUTRAL);
 		SingleBooking b5 = new SingleBooking("mno", 70, SeatType.CORRIDOR);
 		SingleBooking b6 = new SingleBooking("pqr", 85, SeatType.WINDOW);
-		GroupBooking b7 = new GroupBooking(10);
+		GroupBooking b7 = new GroupBooking("AAABBB", 10);
 
 		try {
 			fm.addBookingToFlight(b1, 0);
@@ -70,13 +71,11 @@ public class Program {
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
-
-		fm.removeBookingFromFlight(b1, 0);
-
-		fm.deepPrintFlights();
 		
+		fm.removeBookingFromFlight(b1, 0);
 		
 		// TEST: adding too many bookings to a flight causes an exception
+		
 		fm.addFlight("HNS,BGY,15/02/2000,04:15,90"); // Flight with id 2
 		
 		try {			
@@ -86,7 +85,13 @@ public class Program {
 		} catch (Exception e) {
 			System.err.println(e.getMessage() + " (this is supposed to appear!)");
 		}
+
+		// TEST: adding person to group booking
+		fm.addPersonToGroupBooking("Davide", "AAABBB");
+		fm.addPersonToGroupBooking("Luca", "AAABBB");
+		fm.addPersonToGroupBooking("Francesco", "AAABBB");
+		fm.printGroupBookingSsns("AAABBB");
 		
-//		fm.printBookings();
+		fm.deepPrintFlights();
 	}
 }
