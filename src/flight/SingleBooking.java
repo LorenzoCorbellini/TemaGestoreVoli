@@ -44,7 +44,7 @@ public class SingleBooking extends Booking {
 	}
 
 	@Override
-	public int getNumberOfSeats() {
+	public int getNumberOfOccupiedSeats() {
 		return 1;
 	}
 }

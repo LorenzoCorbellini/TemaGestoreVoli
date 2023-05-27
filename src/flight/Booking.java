@@ -32,7 +32,7 @@ public abstract class Booking {
 	 * 
 	 * @return
 	 */
-	public abstract int getNumberOfSeats();
+	public abstract int getNumberOfOccupiedSeats();
 	
 	public abstract float getPrice();
 	

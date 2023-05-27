@@ -3,8 +3,6 @@ package flight;
 import java.util.HashSet;
 import java.util.Set;
 
-import flightmanager.BookingIdManager;
-
 public class GroupBooking extends Booking {
 
 	private Set<String> ssns = new HashSet<>();
@@ -55,7 +53,7 @@ public class GroupBooking extends Booking {
 	 * Returns the number of seats taken by this booking
 	 * @return
 	 */
-	public int getNumberOfSeats() {
+	public int getNumberOfOccupiedSeats() {
 		return ssns.size();
 	}
 	

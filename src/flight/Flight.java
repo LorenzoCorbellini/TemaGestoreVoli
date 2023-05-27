@@ -6,7 +6,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
-import comparators.BookingPriceComparator;
+import exceptions.FlightCapacityExceededException;
 import flightmanager.FlightIdManager;
 
 public class Flight {
@@ -61,20 +61,34 @@ public class Flight {
 	 * @return
 	 */
 	public boolean isFull() {
-		return seatsTaken() >= maxSeats;
+		return numberOfUnavailableSeats() >= maxSeats;
 	}
 
-	public int seatsTaken() {
+	public int numberOfUnavailableSeats() {
 		int unavailabelSeats = 0;
 
 		for (Booking booking : bookings) {
-			unavailabelSeats += booking.getNumberOfSeats();
+			unavailabelSeats += booking.getNumberOfOccupiedSeats();
 		}
 
 		return unavailabelSeats;
 	}
-
-	public void addBooking(Booking b) {
+	
+	public int numberOfFreeSeats()  {
+		return this.getMaxSeats() - this.numberOfUnavailableSeats();
+	}
+	
+	public boolean canAccomodateBooking(Booking b) {
+		return b.getNumberOfOccupiedSeats() <= this.numberOfFreeSeats();
+	}
+	
+	public void addBooking(Booking b) throws FlightCapacityExceededException {
+		
+		//Check whether this flight has enough free seats		
+		if(b.getNumberOfOccupiedSeats() > this.numberOfFreeSeats()) {
+			throw new FlightCapacityExceededException("Fligt ["+this.getId()+ "] does not have enough available seats!");
+		}
+		
 		bookings.add(b);
 	}
 
@@ -104,6 +118,10 @@ public class Flight {
 		}
 
 		return groupBookings;
+	}
+	
+	public boolean containsBooking(Booking b) {
+		return bookings.contains(b);
 	}
 
 	/**
@@ -142,7 +160,7 @@ public class Flight {
 		StringBuilder sb = new StringBuilder();
 
 		String flightInfo = this.toString() + ", date&time: " + this.getDate().toLocaleString() + ", isFull: "
-				+ this.isFull() + ", seatsTaken: " + this.seatsTaken() + ", single bookings: "
+				+ this.isFull() + ", seatsTaken: " + this.numberOfUnavailableSeats() +", freeSeats: "+ this.numberOfFreeSeats() + ", single bookings: "
 				+ this.numberOfSingleBookings() + ", group bookings: " + this.numberOfGroupBookings();
 
 		sb.append(flightInfo + "\n");
@@ -167,7 +185,7 @@ public class Flight {
 				GroupBooking b = (GroupBooking) booking;
 				sb.append("GroupBooking: [" + b.getId() + "]\n");
 				sb.append(" SSNs       > " + Arrays.toString(b.getSsns()) + "\n");
-				sb.append(" Seats      > " + b.getNumberOfSeats() + "\n");
+				sb.append(" Seats      > " + b.getNumberOfOccupiedSeats() + "\n");
 				sb.append(" Discount   > " + (b.getDiscount() * 100) + "%\n");
 				sb.append(" Price      > " + b.getPricePerPerson() + "\n");
 				sb.append(" TotalPrice > " + b.getPrice() + "\n");

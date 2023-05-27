@@ -6,12 +6,9 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 import java.util.Set;
-
-import javax.swing.text.StyledEditorKit.ForegroundAction;
 
 import comparators.BookingAlphabetComparator;
 import comparators.BookingPriceComparator;
@@ -80,37 +77,56 @@ public class FlightManager {
 		}
 		throw new NoSuchElementException("Flight with id [" + id + "] does not exist!");
 	}
-	
+
+	/**
+	 * Returns the flight that contains the specified booking
+	 * 
+	 * @param id
+	 * @return
+	 */
+	public Flight getFlight(Booking b) {
+		for (Flight flight : flights) {
+			if (flight.containsBooking(b)) {
+				return flight;
+			}
+		}
+		return null;
+	}
+
 	/**
 	 * Returns the flight with the specified departure if it's not full
+	 * 
 	 * @param departure with format "BGY" (ignores case)
 	 * @return
 	 */
 	public Flight getFlightFromDeparture(String departure) {
 		for (Flight flight : flights) {
-			if(!flight.isFull() && flight.getDeparture().equalsIgnoreCase(departure)) {
+			if (!flight.isFull() && flight.getDeparture().equalsIgnoreCase(departure)) {
 				return flight;
 			}
 		}
 		throw new NoSuchElementException("Flight with departure <" + departure + "> that isn't full does not exist!");
 	}
-	
+
 	/**
 	 * Returns the flight with the specified destination if it's not full
+	 * 
 	 * @param destination with format "BGY" (ignores case)
 	 * @return
 	 */
 	public Flight getFlightFromDestination(String destination) {
 		for (Flight flight : flights) {
-			if(!flight.isFull() && flight.getDestination().equalsIgnoreCase(destination)) {
+			if (!flight.isFull() && flight.getDestination().equalsIgnoreCase(destination)) {
 				return flight;
 			}
 		}
-		throw new NoSuchElementException("Flight with destination <" + destination + "> that isn't full does not exist!");
+		throw new NoSuchElementException(
+				"Flight with destination <" + destination + "> that isn't full does not exist!");
 	}
-	
+
 	/**
 	 * Returns an array of bookings sorted by price in ascending order
+	 * 
 	 * @return
 	 */
 	public Booking[] getBookingsSortedByPrice() {
@@ -118,9 +134,10 @@ public class FlightManager {
 		Arrays.sort(bk, new BookingPriceComparator());
 		return bk;
 	}
-	
+
 	/**
 	 * Returns an array of bookings sorted alphabetically from A to Z
+	 * 
 	 * @return
 	 */
 	public Booking[] getBookingsSortedByAlphabet() {
@@ -155,10 +172,17 @@ public class FlightManager {
 
 	public void addBookingToFlight(Booking b, int flightId) throws FlightCapacityExceededException {
 		Flight f = getFlight(flightId);
-
+		
 		if (!bookings.contains(b)) {
 			addBooking(b);
+		} else {			
+			// Check if another flight already has this booking
+			Flight flightWithBooking = getFlight(b);
+			if(flightWithBooking != null && !flightWithBooking.equals(f)) {
+				throw new IllegalArgumentException("Flight [" +flightWithBooking.getId()+"] already has this booking!");
+			}
 		}
+
 
 		if (f.isFull()) {
 			throw new FlightCapacityExceededException("Flight [" + flightId + "] has run out of seats!");
@@ -173,13 +197,21 @@ public class FlightManager {
 		f.removeBooking(b);
 	}
 
-	public void addPersonToGroupBooking(String ssn, String bookingId) {
+	public void addPersonToGroupBooking(String ssn, String bookingId) throws FlightCapacityExceededException {
 		GroupBooking b = (GroupBooking) getBooking(bookingId);
 		if (b == null) {
 			throw new NoSuchElementException(
 					"Could not add " + ssn + " to booking [" + bookingId + "]: booking with such id doesn't exist!");
 		}
-		//TODO: check if flight capacity is exceeded before adding
+
+		// If there's a flight with this booking, we need to check whether the flight
+		// has enough free seats
+		Flight f = getFlight(b);
+		
+		if(f != null && f.isFull()) {
+			throw new FlightCapacityExceededException("Flight ["+f.getId()+"] is full!");
+		}
+
 		b.addPerson(ssn);
 	}
 
@@ -200,7 +232,7 @@ public class FlightManager {
 			addBooking(b);
 		}
 
-		if (to.isFull()) {
+		if (!to.canAccomodateBooking(b)) {
 			throw new FlightCapacityExceededException("Flight [" + to.getId() + "] is full!");
 		}
 
@@ -282,6 +314,10 @@ public class FlightManager {
 			System.out.println(flight.toString());
 		}
 	}
+	
+	public void printFlight(int id) {
+		System.out.println(getFlight(2).deepToString());
+	}
 
 	public void printBookings() {
 		for (Booking booking : bookings) {
@@ -297,7 +333,7 @@ public class FlightManager {
 			System.out.println(flight.deepToString());
 		}
 	}
-	
+
 	/**
 	 * Prints each flight with its revenue and bookings, bookings are sorted
 	 */
@@ -309,6 +345,6 @@ public class FlightManager {
 
 	public void printGroupBookingSsns(String id) {
 		GroupBooking b = (GroupBooking) getBooking(id);
-		System.out.println(Arrays.toString(b.getSsns())); 
+		System.out.println(Arrays.toString(b.getSsns()));
 	}
 }
