@@ -179,6 +179,7 @@ public class FlightManager {
 			throw new NoSuchElementException(
 					"Could not add " + ssn + " to booking [" + bookingId + "]: booking with such id doesn't exist!");
 		}
+		//TODO: check if flight capacity is exceeded before adding
 		b.addPerson(ssn);
 	}
 
