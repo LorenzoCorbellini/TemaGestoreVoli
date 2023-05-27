@@ -61,7 +61,7 @@ public class GroupBooking extends Booking {
 	
 	@Override
 	public String toString() {
-		return "Group booking: [" +this.getId()+"], price: "+this.pricePerPerson;
+		return "Group booking:  [" +this.getId()+"], price: "+this.pricePerPerson;
 	}
 	
 	public String[] getSsns() {

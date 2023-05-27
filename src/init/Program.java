@@ -1,10 +1,14 @@
 package init;
 
 import java.io.FileNotFoundException;
+import java.util.Arrays;
 import java.util.Scanner;
 
 import javax.swing.plaf.synth.SynthOptionPaneUI;
 
+import comparators.BookingAlphabetComparator;
+import comparators.BookingPriceComparator;
+import flight.Booking;
 import flight.Flight;
 import flight.GroupBooking;
 import flight.SeatType;
@@ -46,7 +50,7 @@ public class Program {
 
 		// TEST: create flights from String, add flights to flight manager, add bookings
 		// to flight, move booking from flight to another flight
-		
+
 		fm.addFlight("BGY,FCO,01/10/2000,09:30,120");
 		fm.addFlight("FCO,BGY,15/10/2000,12:30,120");
 
@@ -71,16 +75,16 @@ public class Program {
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
-		
+
 		fm.removeBookingFromFlight(b1, 0);
-		
+
 		// TEST: adding too many bookings to a flight causes an exception
-		
+
 		fm.addFlight("HNS,BGY,15/02/2000,04:15,90"); // Flight with id 2
-		
-		try {			
+
+		try {
 			for (int i = 0; i < 100; i++) {
-				fm.addBookingToFlight(new SingleBooking("12a", 15, SeatType.CORRIDOR), 2);
+				fm.addBookingToFlight(new SingleBooking("12a", i*5, SeatType.CORRIDOR), 2);
 			}
 		} catch (Exception e) {
 			System.err.println(e.getMessage() + " (this is supposed to appear!)");
@@ -91,7 +95,26 @@ public class Program {
 		fm.addPersonToGroupBooking("Luca", "AAABBB");
 		fm.addPersonToGroupBooking("Francesco", "AAABBB");
 		fm.printGroupBookingSsns("AAABBB");
+
+		fm.deepPrintFlightsSorted(new BookingAlphabetComparator()); // This will flood the console withall 90 bookings creates inside the for loop
 		
-		fm.deepPrintFlights();
+		// TEST: get flight from departure or destination
+//		Flight f1 = fm.getFlightFromDeparture("BGY");
+//		System.out.println(f1.toString());
+		
+
+//		Flight f2 = fm.getFlightFromDestination("BGY");
+//		System.out.println(f2.toString());
+		
+		// TEST: sort bookings
+//		Booking[] bookingsPriceSort = fm.getBookingsSortedByPrice();
+//		for (Booking booking : bookingsPriceSort) {
+//			System.out.println(booking.toString());
+//		}
+		
+//		Booking[] bookingsAZSort = fm.getBookingsSortedByAlphabet();
+//		for (Booking booking : bookingsAZSort) {
+//			System.out.println(booking.toString());
+//		}
 	}
 }

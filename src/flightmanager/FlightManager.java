@@ -3,6 +3,7 @@ package flightmanager;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -10,6 +11,10 @@ import java.util.NoSuchElementException;
 import java.util.Scanner;
 import java.util.Set;
 
+import javax.swing.text.StyledEditorKit.ForegroundAction;
+
+import comparators.BookingAlphabetComparator;
+import comparators.BookingPriceComparator;
 import exceptions.FlightCapacityExceededException;
 import flight.Booking;
 import flight.Flight;
@@ -67,13 +72,61 @@ public class FlightManager {
 	 * @param id
 	 * @return
 	 */
-	private Flight getFlight(int id) {
+	public Flight getFlight(int id) {
 		for (Flight flight : flights) {
 			if (flight.getId() == id) {
 				return flight;
 			}
 		}
 		throw new NoSuchElementException("Flight with id [" + id + "] does not exist!");
+	}
+	
+	/**
+	 * Returns the flight with the specified departure if it's not full
+	 * @param departure with format "BGY" (ignores case)
+	 * @return
+	 */
+	public Flight getFlightFromDeparture(String departure) {
+		for (Flight flight : flights) {
+			if(!flight.isFull() && flight.getDeparture().equalsIgnoreCase(departure)) {
+				return flight;
+			}
+		}
+		throw new NoSuchElementException("Flight with departure <" + departure + "> that isn't full does not exist!");
+	}
+	
+	/**
+	 * Returns the flight with the specified destination if it's not full
+	 * @param destination with format "BGY" (ignores case)
+	 * @return
+	 */
+	public Flight getFlightFromDestination(String destination) {
+		for (Flight flight : flights) {
+			if(!flight.isFull() && flight.getDestination().equalsIgnoreCase(destination)) {
+				return flight;
+			}
+		}
+		throw new NoSuchElementException("Flight with destination <" + destination + "> that isn't full does not exist!");
+	}
+	
+	/**
+	 * Returns an array of bookings sorted by price in ascending order
+	 * @return
+	 */
+	public Booking[] getBookingsSortedByPrice() {
+		Booking[] bk = bookings.toArray(new Booking[0]);
+		Arrays.sort(bk, new BookingPriceComparator());
+		return bk;
+	}
+	
+	/**
+	 * Returns an array of bookings sorted alphabetically from A to Z
+	 * @return
+	 */
+	public Booking[] getBookingsSortedByAlphabet() {
+		Booking[] bk = bookings.toArray(new Booking[0]);
+		Arrays.sort(bk, new BookingAlphabetComparator());
+		return bk;
 	}
 
 	/**
@@ -83,7 +136,7 @@ public class FlightManager {
 	 * @param id
 	 * @return
 	 */
-	private Booking getBooking(String id) {
+	public Booking getBooking(String id) {
 		for (Booking booking : bookings) {
 			if (booking.getId().equals(id)) {
 				return booking;
@@ -241,6 +294,15 @@ public class FlightManager {
 	public void deepPrintFlights() {
 		for (Flight flight : flights) {
 			System.out.println(flight.deepToString());
+		}
+	}
+	
+	/**
+	 * Prints each flight with its revenue and bookings, bookings are sorted
+	 */
+	public void deepPrintFlightsSorted(Comparator<Booking> comparator) {
+		for (Flight flight : flights) {
+			System.out.println(flight.deepToString(comparator));
 		}
 	}
 

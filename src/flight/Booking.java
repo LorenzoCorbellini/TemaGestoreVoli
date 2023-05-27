@@ -35,7 +35,33 @@ public abstract class Booking {
 	public abstract int getNumberOfSeats();
 	
 	public abstract float getPrice();
-
+	
+	/**
+	 * Returns 1, -1 or 0 if the price of this booking is greater, lesser or equal respectively
+	 * @param b
+	 * @return
+	 */
+	public int comparePrice(Booking b) {
+		if(this.getPrice() > b.getPrice()) {
+			return 1;
+		}
+		
+		if(this.getPrice() < b.getPrice()) {
+			return -1;
+		}
+		
+		return 0;
+	}
+	
+	/**
+	 * Returns 1, -1 or 0 if the id of this booking is greater, lesser or equal respectively
+	 * @param b
+	 * @return
+	 */
+	public int compareIdAlphabetically(Booking b) {
+		return this.getId().compareTo(b.getId());
+	}
+	
 	@Override
 	public int hashCode() {
 		return this.getId().hashCode();

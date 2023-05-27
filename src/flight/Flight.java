@@ -1,10 +1,12 @@
 package flight;
 
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+import comparators.BookingPriceComparator;
 import flightmanager.FlightIdManager;
 
 public class Flight {
@@ -120,10 +122,23 @@ public class Flight {
 	}
 
 	/**
-	 * Returns a string representation of this flight complete with each booking
+	 * Returns array of bookings sorted according to the comparator
+	 * @param bookingComparator
 	 * @return
 	 */
-	public String deepToString() {
+	public Booking[] getSortedBookings(Comparator<Booking> bookingComparator) {
+		Booking[] bk = bookings.toArray(new Booking[0]);
+		Arrays.sort(bk, bookingComparator);
+		return bk;
+	}
+	
+	/**
+	 * Returns a string representation of this flight, complete with each booking,
+	 * sorted by the comparator. Pass null if sorting is not necessary.
+	 * 
+	 * @return
+	 */
+	public String deepToString(Comparator<Booking> comparator) {
 		StringBuilder sb = new StringBuilder();
 
 		String flightInfo = this.toString() + ", date&time: " + this.getDate().toLocaleString() + ", isFull: "
@@ -132,25 +147,38 @@ public class Flight {
 
 		sb.append(flightInfo + "\n");
 
-		for (Booking booking : bookings) {
+		Booking[] bookingsArray;
+		
+		// Should we sort the bookings?
+		if(comparator == null) {
+			bookingsArray = bookings.toArray(new Booking[0]);
+		} else {
+			bookingsArray = getSortedBookings(comparator);
+		}
+
+		for (Booking booking : bookingsArray) {
 			if (booking instanceof SingleBooking) {
 				SingleBooking b = (SingleBooking) booking;
 				sb.append("SingleBooking: [" + b.getId() + "]\n");
 				sb.append(" SSN        > " + b.getSsn() + "\n");
 				sb.append(" Price      > " + b.getPrice() + "\n");
-				sb.append(" Seat       > " + b.getPrice() + "\n");
+				sb.append(" Seat       > " + b.getSeat() + "\n");
 			} else if (booking instanceof GroupBooking) {
 				GroupBooking b = (GroupBooking) booking;
 				sb.append("GroupBooking: [" + b.getId() + "]\n");
 				sb.append(" SSNs       > " + Arrays.toString(b.getSsns()) + "\n");
-				sb.append(" Seats      > " + b.getNumberOfSeats() + "\n");				
-				sb.append(" Discount   > " + (b.getDiscount()*100) + "%\n");
+				sb.append(" Seats      > " + b.getNumberOfSeats() + "\n");
+				sb.append(" Discount   > " + (b.getDiscount() * 100) + "%\n");
 				sb.append(" Price      > " + b.getPricePerPerson() + "\n");
 				sb.append(" TotalPrice > " + b.getPrice() + "\n");
 			}
 		}
 
 		return sb.toString();
+	}
+
+	public String deepToString() {
+		return deepToString(null);
 	}
 
 	@Override
