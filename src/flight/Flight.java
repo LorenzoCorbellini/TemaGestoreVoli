@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+import comparators.BookingPriceComparator;
 import exceptions.FlightCapacityExceededException;
 import flightmanager.FlightIdManager;
 
@@ -173,7 +174,7 @@ public class Flight {
 		} else {
 			bookingsArray = getSortedBookings(comparator);
 		}
-
+		
 		for (Booking booking : bookingsArray) {
 			if (booking instanceof SingleBooking) {
 				SingleBooking b = (SingleBooking) booking;
